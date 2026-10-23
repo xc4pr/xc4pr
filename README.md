@@ -33,7 +33,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/work-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="assets/work-light.svg">
-  <img alt="What I do. AI x Fintech: implementation, fine-tuning and process automation in fintech and crypto. Data on autopilot: data, reporting and compliance workflows that run without me. Agentic AI: autonomous agents and coding-agent workflows with hooks, custom instructions and an Obsidian second brain; some take orders via Telegram. Self-hosted: local-first Linux on Arch, running on my own hardware instead of someone else's cloud. Local LLMs: inference on AMD GPUs with ROCm and Ollama. Agent security: security reviews of AI agent tooling." src="assets/work-dark.svg" width="100%">
+  <img alt="What I do. AI x Fintech: implementation, fine-tuning and process automation in fintech and crypto. Data on autopilot: data, reporting and compliance workflows that run without me. Agentic AI: autonomous agents and coding-agent workflows with hooks, custom instructions and an Obsidian second brain; some take orders via Telegram. Self-hosted: local-first Linux on Arch, running on my own hardware instead of someone else's cloud. Local LLMs: inference on AMD GPUs with ROCm and Ollama. Favorite model: Qwen 3.8. Agent security: security reviews of AI agent tooling." src="assets/work-dark.svg" width="100%">
 </picture>
 
 ## > cat pipeline.sh
@@ -91,7 +91,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/interests-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="assets/interests-light.svg">
-  <img alt="Interests: Local-first, your data, your device. System one models, Jev and Laya: typed decisions, not generated text. Data analysis: preparing, cleaning and analyzing data. Bitcoin, on-chain analytics. Forensics, blockchain forensics. Digital ID, verifiable credentials. Number theory, primes and patterns. Cyberpunk 3D, art and animation. Linux ricing, dotfiles over defaults. FOSS, free and open source. Cybersecurity, zero trust by default." src="assets/interests-dark.svg" width="100%">
+  <img alt="Interests: Local-first, your data, your device. System one models, Laya: typed decisions, not generated text. Data analysis: preparing, cleaning and analyzing data. Bitcoin, on-chain analytics. Forensics, blockchain forensics. Digital ID, verifiable credentials. Number theory, primes and patterns. Cyberpunk 3D, art and animation. Linux ricing, dotfiles over defaults. FOSS, free and open source. Cybersecurity, zero trust by default." src="assets/interests-dark.svg" width="100%">
 </picture>
 
 ## > pacman -Qe

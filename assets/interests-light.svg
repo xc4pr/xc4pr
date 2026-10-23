@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 734" width="840" height="734" role="img" aria-label="Interests: Local-first, your data, your device. System one models, Jev and Laya: typed decisions, not generated text. Data analysis: preparing, cleaning and analyzing data. Bitcoin, on-chain analytics. Forensics, blockchain forensics. Digital ID, verifiable credentials. Number theory, primes and patterns. Cyberpunk 3D, art and animation. Linux ricing, dotfiles over defaults. FOSS, free and open source. Cybersecurity, zero trust by default.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 734" width="840" height="734" role="img" aria-label="Interests: Local-first, your data, your device. System one models, Laya: typed decisions, not generated text. Data analysis: preparing, cleaning and analyzing data. Bitcoin, on-chain analytics. Forensics, blockchain forensics. Digital ID, verifiable credentials. Number theory, primes and patterns. Cyberpunk 3D, art and animation. Linux ricing, dotfiles over defaults. FOSS, free and open source. Cybersecurity, zero trust by default.">
 <style>
 text{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace}
 .t{font-size:28px;font-weight:700;letter-spacing:.04em;fill:#007f9c}
@@ -50,7 +50,7 @@ text{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono
 <rect x="5" y="5" width="390" height="126" rx="12" fill="none" stroke="url(#bd)" stroke-opacity=".4"/>
 <g class="ic" style="animation-delay:-0.7s" transform="translate(340 18)"><path class="s" d="M21 2L8 20H17L14 34L28 14H19Z"/><path class="sm" d="M3 10H9M30 26H35M3 30H8"/></g>
 <text class="t" x="24" y="48">SYSTEM ONE MODELS</text>
-<text class="d"><tspan x="24" y="86">Jev, Laya: typed decisions,</tspan><tspan x="24" y="112">not generated text</tspan></text>
+<text class="d"><tspan x="24" y="86">Laya: typed decisions, not</tspan><tspan x="24" y="112">generated text</tspan></text>
 </g>
 <g transform="translate(429 146)">
 <rect width="400" height="136" rx="16" fill="#fbfcff" fill-opacity="1" filter="url(#sh)"/>
