@@ -1,0 +1,287 @@
+name: profile-assets
+
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: profile-assets
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Prepare output folder
+        run: mkdir -p dist/assets
+
+      - name: Contribution snake
+        uses: Platane/snk/svg-only@d8f6715049803e982ee5ff501b6b9b7d5deeb09b # v3.5.0
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/assets/snake-dark.svg?palette=github-dark&color_dots=#161b22,#0e4f5c,#008a99,#00c2d6,#00f0ff&color_snake=#ff2bd6
+            dist/assets/snake-light.svg?palette=github-light&color_dots=#ebedf0,#b3ecf5,#5fd3e6,#00a3bf,#007f9c&color_snake=#b0128c
+
+      - name: Write 3D graph settings
+        run: |
+          cat > "$RUNNER_TEMP/contrib3d.json" <<'JSON'
+          [
+            {
+              "type": "normal",
+              "fileName": "contrib3d-dark.svg",
+              "backgroundColor": "#0a0a12",
+              "foregroundColor": "#e6f7ff",
+              "strongColor": "#ff2bd6",
+              "weakColor": "#8b95b8",
+              "radarColor": "#ff2bd6",
+              "growingAnimation": true,
+              "contribColors": ["#151a2e", "#0e4f5c", "#008a99", "#00c2d6", "#00f0ff"]
+            },
+            {
+              "type": "normal",
+              "fileName": "contrib3d-light.svg",
+              "backgroundColor": "#f4f7fb",
+              "foregroundColor": "#111428",
+              "strongColor": "#b0128c",
+              "weakColor": "#4f5878",
+              "radarColor": "#b0128c",
+              "growingAnimation": true,
+              "contribColors": ["#ebedf0", "#b3ecf5", "#5fd3e6", "#00a3bf", "#007f9c"]
+            }
+          ]
+          JSON
+
+      - name: 3D contribution graph
+        uses: yoshi389111/github-profile-3d-contrib@7d95e7d4cdc028dd1e1cbd957d65f35efb12ae39 # v0.9.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USERNAME: ${{ github.repository_owner }}
+          SETTING_JSON: ${{ runner.temp }}/contrib3d.json
+
+      - name: Collect 3D graph files
+        run: |
+          mv profile-3d-contrib/contrib3d-dark.svg dist/assets/contrib3d-dark.svg
+          mv profile-3d-contrib/contrib3d-light.svg dist/assets/contrib3d-light.svg
+
+      - name: Upstream log card
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          import sys
+          import urllib.parse
+          import urllib.request
+          from xml.sax.saxutils import escape
+
+          TOKEN = os.environ["GITHUB_TOKEN"]
+          OWNER = os.environ["OWNER"]
+          OUT_DIR = os.environ.get("OUT_DIR", "dist/assets")
+          FONT = 'ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace'
+          CHAR_W = 21 * 0.62
+          SUM_W = 20 * 0.62
+          WIDTH = 840
+          PAD = 26
+          LIMIT = 5
+
+
+          def search(query, per_page=1):
+              params = urllib.parse.urlencode(
+                  {"q": query, "sort": "created", "order": "desc", "per_page": per_page}
+              )
+              req = urllib.request.Request(
+                  "https://api.github.com/search/issues?" + params,
+                  headers={
+                      "Authorization": "Bearer " + TOKEN,
+                      "Accept": "application/vnd.github+json",
+                      "X-GitHub-Api-Version": "2022-11-28",
+                      "User-Agent": "profile-assets",
+                  },
+              )
+              with urllib.request.urlopen(req, timeout=30) as resp:
+                  data = json.load(resp)
+              if "total_count" not in data or "items" not in data:
+                  raise RuntimeError("unexpected API response")
+              return data
+
+
+          def clean(text):
+              text = text.replace(chr(0x2013), "-").replace(chr(0x2014), "-")
+              text = re.sub(r"[\x00-\x1f\x7f-\x9f]", " ", text)
+              return re.sub(r" +", " ", text).strip()
+
+
+          try:
+              base = "author:%s type:pr is:public -user:%s" % (OWNER, OWNER)
+              recent = search(base, LIMIT)["items"][:LIMIT]
+              merged = search(base + " is:merged")["total_count"]
+              opened = search(base + " is:open")["total_count"]
+              issues = search(
+                  "author:%s type:issue is:public -user:%s" % (OWNER, OWNER)
+              )["total_count"]
+          except Exception as exc:
+              print("API error: %s" % type(exc).__name__, file=sys.stderr)
+              sys.exit(1)
+
+          rows = []
+          for item in recent:
+              if (item.get("pull_request") or {}).get("merged_at"):
+                  status = "merged"
+              elif item.get("state") == "open":
+                  status = "open"
+              else:
+                  status = "closed"
+              repo = item["repository_url"].rstrip("/").split("/")[-1]
+              rows.append((status, clean("%s#%d" % (repo, item["number"])), clean(item["title"])))
+
+          PALETTES = {
+              "dark": {
+                  "cardbase": "#0c0d1a", "cardop": "0.92", "cyan": "#00f0ff",
+                  "magenta": "#ff2bd6", "text": "#e6f7ff", "dim": "#8b95b8",
+                  "ok": "#39ff9f", "blob": "0.30", "g1": "0.10", "g2": "0.03",
+                  "hl": "0.25", "glow": True,
+              },
+              "light": {
+                  "cardbase": "#fbfcff", "cardop": "1", "cyan": "#007f9c",
+                  "magenta": "#b0128c", "text": "#111428", "dim": "#4f5878",
+                  "ok": "#0a8f5a", "blob": "0.14", "g1": "0.65", "g2": "0.35",
+                  "hl": "0.9", "glow": False,
+              },
+          }
+
+
+          def fit(title, x):
+              room = int((WIDTH - PAD - x) // CHAR_W)
+              if len(title) <= room:
+                  return title
+              return title[: max(room - 3, 1)].rstrip() + "..."
+
+
+          def render(name, p):
+              row_h = 78
+              y0 = 108
+              n = max(len(rows), 1)
+              last_y = y0 + (n - 1) * row_h + 36
+              sum_y = last_y + 62
+              height = sum_y + 32
+              W = WIDTH - 4
+              glow = ' filter="url(#gl)"' if p["glow"] else ""
+              out = []
+              a = out.append
+              a('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" width="%d" height="%d" role="img" aria-label="%s">'
+                % (WIDTH, height, WIDTH, height, escape(clean(
+                    "Upstream contributions: %d merged, %d open, %d issues" % (merged, opened, issues)), {'"': "&quot;"})))
+              a("<style>")
+              a("text{font-family:%s;font-size:21px}" % FONT)
+              a(".c{animation:blink 1.1s steps(1) infinite}")
+              a("@keyframes blink{50%{opacity:0}}")
+              a("@media (prefers-reduced-motion:reduce){*{animation:none!important}}")
+              a("</style>")
+              a("<defs>")
+              a('<clipPath id="cl"><rect x="2" y="2" width="%d" height="%d" rx="16"/></clipPath>' % (W, height - 4))
+              a('<linearGradient id="bd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="%s"/><stop offset="1" stop-color="%s"/></linearGradient>' % (p["cyan"], p["magenta"]))
+              a('<linearGradient id="gs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="%s"/><stop offset="1" stop-color="#fff" stop-opacity="%s"/></linearGradient>' % (p["g1"], p["g2"]))
+              a('<filter id="bl" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="35"/></filter>')
+              if p["glow"]:
+                  a('<filter id="gl" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>')
+              else:
+                  a('<filter id="sh" x="-5%" y="-5%" width="110%" height="115%"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#1b2550" flood-opacity="0.10"/></filter>')
+              a("</defs>")
+              base_attr = ' filter="url(#sh)"' if not p["glow"] else ""
+              a('<rect x="2" y="2" width="%d" height="%d" rx="16" fill="%s" fill-opacity="%s"%s/>' % (W, height - 4, p["cardbase"], p["cardop"], base_attr))
+              a('<g clip-path="url(#cl)">')
+              a('<circle cx="90" cy="%d" r="100" fill="%s" fill-opacity="%s" filter="url(#bl)"/>' % (height - 20, p["cyan"], p["blob"]))
+              a('<circle cx="760" cy="30" r="90" fill="%s" fill-opacity="%s" filter="url(#bl)"/>' % (p["magenta"], p["blob"]))
+              a('<rect x="2" y="2" width="%d" height="%d" fill="url(#gs)"/>' % (W, height - 4))
+              a("</g>")
+              a('<rect x="2" y="2" width="%d" height="%d" rx="16" fill="none" stroke="url(#bd)" stroke-width="1.5"/>' % (W, height - 4))
+              a('<line x1="18" y1="3" x2="%d" y2="3" stroke="#fff" stroke-opacity="%s"/>' % (WIDTH - 18, p["hl"]))
+              cmd = "git log --author=%s --upstream" % OWNER
+              a('<text x="%d" y="54"%s><tspan fill="%s">&gt;</tspan><tspan fill="%s" dx="13">%s</tspan></text>'
+                % (PAD, glow, p["magenta"], p["cyan"], escape(clean(cmd))))
+              if rows:
+                  for i, (status, ref, title) in enumerate(rows):
+                      y = y0 + i * row_h
+                      col = {"merged": p["ok"], "open": p["cyan"], "closed": p["dim"]}[status]
+                      pw = 98
+                      a('<rect x="%d" y="%d" width="%d" height="30" rx="15" fill="%s" fill-opacity="0.14" stroke="%s" stroke-width="1.2"/>'
+                        % (PAD, y - 22, pw, col, col))
+                      a('<text x="%s" y="%d" text-anchor="middle" fill="%s" style="font-size:18px">%s</text>'
+                        % (PAD + pw / 2, y - 2, col, status))
+                      rx = PAD + pw + 16
+                      a('<text x="%s" y="%d" fill="%s">%s</text>' % (rx, y, p["magenta"], escape(ref)))
+                      a('<text x="%d" y="%d" fill="%s">%s</text>' % (PAD, y + 36, p["text"], escape(fit(title, PAD))))
+                      if i < len(rows) - 1:
+                          a('<line x1="%d" y1="%d" x2="%d" y2="%d" stroke="%s" stroke-opacity="0.18"/>' % (PAD, y + 49, WIDTH - PAD, y + 49, p["dim"]))
+              else:
+                  a('<text x="%d" y="%d" fill="%s">no public upstream PRs yet</text>' % (PAD, y0, p["dim"]))
+              a('<line x1="%d" y1="%d" x2="%d" y2="%d" stroke="%s" stroke-opacity="0.35"/>' % (PAD, sum_y - 34, WIDTH - PAD, sum_y - 34, p["dim"]))
+              summary = "%d merged · %d open · %d issues" % (merged, opened, issues)
+              a('<text x="%d" y="%d" fill="%s" style="font-size:20px">%s</text>' % (PAD, sum_y, p["dim"], escape(summary)))
+              cx = PAD + (len(summary) + 1) * SUM_W
+              a('<rect class="c" x="%s" y="%d" width="11" height="22" fill="%s"/>' % (round(cx, 2), sum_y - 18, p["cyan"]))
+              a("</svg>")
+              svg = "\n".join(out) + "\n"
+              os.makedirs(OUT_DIR, exist_ok=True)
+              with open(os.path.join(OUT_DIR, "upstream-%s.svg" % name), "w", encoding="utf-8") as fh:
+                  fh.write(svg)
+
+
+          for name, pal in PALETTES.items():
+              render(name, pal)
+          PY
+
+      - name: Check generated files
+        run: |
+          python3 - <<'PY'
+          import os
+          import sys
+          import xml.etree.ElementTree as ET
+
+          names = [
+              "snake-dark", "snake-light",
+              "contrib3d-dark", "contrib3d-light",
+              "upstream-dark", "upstream-light",
+          ]
+          bad = []
+          for n in names:
+              path = "dist/assets/%s.svg" % n
+              if not os.path.isfile(path):
+                  bad.append(path + ": missing")
+                  continue
+              if os.path.getsize(path) < 1000:
+                  bad.append(path + ": too small")
+              try:
+                  ET.parse(path)
+              except ET.ParseError as exc:
+                  bad.append("%s: invalid XML (%s)" % (path, exc))
+              with open(path, encoding="utf-8", errors="replace") as fh:
+                  if "<script" in fh.read().lower():
+                      bad.append(path + ": contains script")
+          if bad:
+              print("\n".join(bad), file=sys.stderr)
+              sys.exit(1)
+          print("all %d files ok" % len(names))
+          PY
+
+      - name: Publish to output branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          cd dist
+          git init -q -b output
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "update generated assets"
+          git push --force "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPO}.git" output:output
