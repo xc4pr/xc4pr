@@ -69,6 +69,30 @@ jobs:
           mv profile-3d-contrib/contrib3d-dark.svg dist/assets/contrib3d-dark.svg
           mv profile-3d-contrib/contrib3d-light.svg dist/assets/contrib3d-light.svg
 
+      - name: Keep only the 3D calendar
+        run: |
+          python3 - dist/assets/contrib3d-dark.svg dist/assets/contrib3d-light.svg <<'PY'
+          import re
+          import sys
+          import xml.etree.ElementTree as ET
+
+          NS = "http://www.w3.org/2000/svg"
+          ET.register_namespace("", NS)
+          for path in sys.argv[1:]:
+              tree = ET.parse(path)
+              root = tree.getroot()
+              groups = [el for el in root if el.tag == "{%s}g" % NS]
+              keep = max(groups, key=lambda g: sum(1 for _ in g.iter()))
+              for g in groups:
+                  if g is not keep:
+                      root.remove(g)
+              for parent in root.iter():
+                  for el in list(parent):
+                      if el.tag == "{%s}text" % NS and re.search(r"\d{4}-\d{2}-\d{2}", el.text or ""):
+                          parent.remove(el)
+              tree.write(path, encoding="unicode")
+          PY
+
       - name: Upstream log card
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
