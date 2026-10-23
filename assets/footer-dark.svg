@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 230" width="840" height="230" role="img" aria-label="logout. connection to xc4pr closed. ping me via issues, PRs or socials.">
+<style>
+text{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace}
+.c{animation:blink 1.1s steps(1) infinite}@keyframes blink{50%{opacity:0}}@keyframes l{to{transform:translateX(-840px)}}@keyframes r{from{transform:translateX(-840px)}}.w0{animation:l 26s linear infinite}.w1{animation:r 19s linear infinite}.w2{animation:l 13s linear infinite}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
+</style>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0a12" stop-opacity="0"/><stop offset=".55" stop-color="#0a0a12" stop-opacity=".9"/><stop offset="1" stop-color="#120c22"/></linearGradient>
+<linearGradient id="wg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1680" y2="0"><stop offset="0" stop-color="#00f0ff"/><stop offset=".25" stop-color="#ff2bd6"/><stop offset=".5" stop-color="#00f0ff"/><stop offset=".75" stop-color="#8a5cff"/><stop offset="1" stop-color="#00f0ff"/></linearGradient>
+<linearGradient id="wf" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1680" y2="0"><stop offset="0" stop-color="#00f0ff"/><stop offset=".25" stop-color="#ff2bd6"/><stop offset=".5" stop-color="#00f0ff"/><stop offset=".75" stop-color="#8a5cff"/><stop offset="1" stop-color="#00f0ff"/></linearGradient>
+<clipPath id="cp"><path d="M0 0H840V212a18 18 0 0 1-18 18H18a18 18 0 0 1-18-18Z"/></clipPath>
+<filter id="glow" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<g clip-path="url(#cp)">
+<rect width="840" height="230" fill="url(#bg)"/>
+<g class="w0"><path d="M0 180 q210 -22 420 0 t420 0 t420 0 t420 0 V230 H0 Z" fill="url(#wf)" opacity="0.16"/><path d="M0 180 q210 -22 420 0 t420 0 t420 0 t420 0" fill="none" stroke="url(#wg)" stroke-width="7" opacity=".16"/><path d="M0 180 q210 -22 420 0 t420 0 t420 0 t420 0" fill="none" stroke="url(#wg)" stroke-width="2"/></g>
+<g class="w1"><path d="M0 192 q105 -18 210 0 t210 0 t210 0 t210 0 t210 0 t210 0 t210 0 t210 0 V230 H0 Z" fill="url(#wf)" opacity="0.2"/><path d="M0 192 q105 -18 210 0 t210 0 t210 0 t210 0 t210 0 t210 0 t210 0 t210 0" fill="none" stroke="url(#wg)" stroke-width="7" opacity=".16"/><path d="M0 192 q105 -18 210 0 t210 0 t210 0 t210 0 t210 0 t210 0 t210 0 t210 0" fill="none" stroke="url(#wg)" stroke-width="2"/></g>
+<g class="w2"><path d="M0 204 q70 -14 140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 V230 H0 Z" fill="url(#wf)" opacity="0.26"/><path d="M0 204 q70 -14 140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0" fill="none" stroke="url(#wg)" stroke-width="7" opacity=".16"/><path d="M0 204 q70 -14 140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0 t140 0" fill="none" stroke="url(#wg)" stroke-width="2"/></g>
+</g>
+<g filter="url(#glow)"><text x="357.6" y="66" font-size="26" font-weight="700" textLength="124.8" lengthAdjust="spacingAndGlyphs" fill="#00f0ff"><tspan fill="#ff2bd6">&gt;</tspan> logout</text></g>
+<text x="244.2" y="102" font-size="21" textLength="351.5" lengthAdjust="spacingAndGlyphs" fill="#8b95b8">connection to xc4pr closed.</text>
+<text x="184.7" y="134" font-size="21" textLength="455.7" lengthAdjust="spacingAndGlyphs" fill="#8b95b8">ping me via issues, PRs or socials.</text>
+<rect class="c" x="644.4" y="118" width="11" height="21" fill="#00f0ff"/>
+</svg>
