@@ -91,7 +91,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/interests-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="assets/interests-light.svg">
-  <img alt="Interests: Cybersecurity, main focus: trust nothing, verify everything. System one models, Jev and Laya: typed decisions, not generated text. Data analysis: preparing, cleaning and analyzing data. Bitcoin, on-chain analytics. Forensics, blockchain forensics. Digital ID, verifiable credentials. Number theory, primes and patterns. Cyberpunk 3D, art and animation. Linux ricing, dotfiles over defaults. FOSS, free and open source. Local-first, your data, your device." src="assets/interests-dark.svg" width="100%">
+  <img alt="Interests: Local-first, your data, your device. System one models, Jev and Laya: typed decisions, not generated text. Data analysis: preparing, cleaning and analyzing data. Bitcoin, on-chain analytics. Forensics, blockchain forensics. Digital ID, verifiable credentials. Number theory, primes and patterns. Cyberpunk 3D, art and animation. Linux ricing, dotfiles over defaults. FOSS, free and open source. Cybersecurity, zero trust by default." src="assets/interests-dark.svg" width="100%">
 </picture>
 
 ## > pacman -Qe
