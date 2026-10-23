@@ -12,7 +12,7 @@
 
 <p align="center">
   I build AI that does real work: agents, automations and the self-hosted stack they run on.<br>
-  Mostly fintech and crypto, mostly on hardware I own.<br>
+  Mostly fintech and crypto, mostly on owned hardware.<br>
   If I do it twice, I script it. The third time, an agent does it.
 </p>
 
