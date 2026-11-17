@@ -158,3 +158,5 @@
   <source media="(prefers-color-scheme: light)" srcset="assets/footer-light.svg">
   <img alt="logout. connection to xc4pr closed. ping me via issues, PRs or socials." src="assets/footer-dark.svg" width="100%">
 </picture>
+
+## > Quote: do not rent, do not buy, build!
